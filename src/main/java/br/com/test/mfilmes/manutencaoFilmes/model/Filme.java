@@ -1,5 +1,7 @@
 package br.com.test.mfilmes.manutencaoFilmes.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,6 +15,7 @@ public class Filme
     private String diretor;
     @ManyToOne
     private Genero genero;
+    @Length(max = 1000)
     private String sinopse;
     private int ano;
 
