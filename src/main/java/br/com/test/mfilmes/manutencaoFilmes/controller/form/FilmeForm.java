@@ -3,12 +3,20 @@ package br.com.test.mfilmes.manutencaoFilmes.controller.form;
 import br.com.test.mfilmes.manutencaoFilmes.model.Filme;
 import br.com.test.mfilmes.manutencaoFilmes.model.Genero;
 import br.com.test.mfilmes.manutencaoFilmes.repository.GeneroRepository;
+import com.sun.istack.NotNull;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
 
 public class FilmeForm
 {
+    @NotNull @NotEmpty
     private String titulo;
+    @NotNull @NotEmpty
     private String diretor;
+    @NotNull @NotEmpty
     private String tipoGenero;
+    @Length(max = 1000)
     private String sinopse;
     private int ano;
 
