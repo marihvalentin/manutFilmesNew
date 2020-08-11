@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <title>Lista de Filmes</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <div id="listaDeFilmes">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Título</th>
+                <th>Diretor</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+                <th>Consultar</th>
+            </tr>
+            </thead>
+            <tr th:each="filme : ${filmes}">
+                <td><span th:text="${filme.titulo}"></span></td>
+                <td><span th:text="${filme.diretor}"></span></td>
+                <td><span th:text="${filme.genero}"></span></td>
+                <td><p th:text="${filme.sinopse}"></p></td>
+                <td><span th:text="${filme.ano}"></span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="https://akax.googleapis.com/ajax/libs/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+</html>
