@@ -2,6 +2,7 @@ package br.com.test.mfilmes.manutencaoFilmes.controller.form;
 
 import br.com.test.mfilmes.manutencaoFilmes.model.Filme;
 import br.com.test.mfilmes.manutencaoFilmes.model.Genero;
+import br.com.test.mfilmes.manutencaoFilmes.repository.FilmeRepository;
 import br.com.test.mfilmes.manutencaoFilmes.repository.GeneroRepository;
 import com.sun.istack.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -73,5 +74,18 @@ public class FilmeForm
     public Filme converter(GeneroRepository generoRepository)
     {   Genero genero = generoRepository.findByTipo(tipoGenero);
         return new Filme(titulo, diretor, genero, sinopse, ano);
+    }
+
+    public Filme editarFilme(Integer id, FilmeRepository filmeRepository)
+    {
+        Filme filme = filmeRepository.getOne(id);
+
+        filme.setTitulo(this.titulo);
+        filme.setDiretor(this.diretor);
+        //filme.setGenero();
+        filme.setSinopse(this.sinopse);
+        filme.setAno(this.ano);
+
+        return filme;
     }
 }
