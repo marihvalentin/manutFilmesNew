@@ -9,5 +9,5 @@ public interface GeneroRepository extends JpaRepository<Genero, Integer>
 {
     Genero findByTipo(String tipoGenero);
 
-    //List<Filme> findByTipo(String tipogen);
+    List<Genero> findByTipoContainingIgnoreCase(String tipoGenero);
 }

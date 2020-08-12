@@ -12,8 +12,8 @@ public class FilmeDto
 
     public FilmeDto(Filme filme)
     {
-        this.titulo = titulo;
-        this.diretor = diretor;
+        this.titulo = filme.getTitulo();
+        this.diretor = filme.getDiretor();
     }
 
     public String getTitulo()
