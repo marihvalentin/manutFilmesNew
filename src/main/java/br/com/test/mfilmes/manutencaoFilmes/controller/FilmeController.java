@@ -81,4 +81,11 @@ public class FilmeController
         return ResponseEntity.created(uri).body(new FilmeDto(filme));
     }
 
+    @RequestMapping(value = "/consultarFilme/{id}", method = RequestMethod.GET)
+    public FilmeDto consultar(@PathVariable Integer id)
+    {
+        Filme filme = filmeRepository.getOne(id);
+        return new FilmeDto(filme);
+    }
+
 }
