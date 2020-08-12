@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -89,10 +90,14 @@ public class FilmeController
 
     //CONSULTAR FILME
     @RequestMapping(value = "/consultarFilme/{id}", method = RequestMethod.GET)
-    public ConsultaFilmeDto consultar(@PathVariable Integer id)
+    public ResponseEntity<ConsultaFilmeDto> consultar(@PathVariable Integer id)
     {
-        Filme filme = filmeRepository.getOne(id);
-        return new ConsultaFilmeDto(filme);
+        Optional<Filme> filme = filmeRepository.findById(id);
+        if(filme.isPresent())
+        {
+            return ResponseEntity.ok(new ConsultaFilmeDto(filme.get()));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     //EDITAR FILME
@@ -100,9 +105,13 @@ public class FilmeController
     @Transactional
     public ResponseEntity<FilmeDto> editar(@PathVariable Integer id, @RequestBody @Valid FilmeForm form)
     {
-        Filme filme = form.editarFilme(id, filmeRepository);
-
-        return ResponseEntity.ok(new FilmeDto(filme));
+        Optional<Filme> optional = filmeRepository.findById(id);
+        if(optional.isPresent())
+        {
+            Filme filme = form.editarFilme(id, filmeRepository);
+            return ResponseEntity.ok(new FilmeDto(filme));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     //EXCLUIR FILME
@@ -110,9 +119,13 @@ public class FilmeController
     @Transactional
     public ResponseEntity<?> excluir(@PathVariable Integer id)
     {
-        filmeRepository.deleteById(id);
-
-        return ResponseEntity.ok().build();
+        Optional<Filme> optional = filmeRepository.findById(id);
+        if(optional.isPresent())
+        {
+            filmeRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
