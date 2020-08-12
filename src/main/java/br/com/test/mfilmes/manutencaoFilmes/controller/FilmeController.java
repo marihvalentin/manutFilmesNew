@@ -1,5 +1,6 @@
 package br.com.test.mfilmes.manutencaoFilmes.controller;
 
+import br.com.test.mfilmes.manutencaoFilmes.controller.dto.ConsultaFilmeDto;
 import br.com.test.mfilmes.manutencaoFilmes.controller.dto.FilmeDto;
 import br.com.test.mfilmes.manutencaoFilmes.controller.form.FilmeForm;
 import br.com.test.mfilmes.manutencaoFilmes.model.Filme;
@@ -82,10 +83,10 @@ public class FilmeController
     }
 
     @RequestMapping(value = "/consultarFilme/{id}", method = RequestMethod.GET)
-    public FilmeDto consultar(@PathVariable Integer id)
+    public ConsultaFilmeDto consultar(@PathVariable Integer id)
     {
         Filme filme = filmeRepository.getOne(id);
-        return new FilmeDto(filme);
+        return new ConsultaFilmeDto(filme);
     }
 
 }
