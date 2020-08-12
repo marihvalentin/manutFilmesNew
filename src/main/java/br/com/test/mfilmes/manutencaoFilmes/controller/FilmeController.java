@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class FilmeController
     @Autowired
     private GeneroRepository generoRepository;
 
+    //LISTAR FILMES
     @RequestMapping(value = "/listarFilmes", method = RequestMethod.GET)
     public List<FilmeDto> listarFilmes(@RequestParam(required = false) String titulo,
                                        @RequestParam(required = false) String tipoGenero)
@@ -45,6 +46,7 @@ public class FilmeController
         return FilmeDto.converter(filmes);
     }
 
+    //FILTRAR LISTAGEM POR GENERO
     private void getFilmeByGenero(@RequestParam(required = false) String tipoGenero, List<Filme> filmes) {
         if (!(tipoGenero == null))
         {
@@ -59,6 +61,7 @@ public class FilmeController
         }
     }
 
+    //FILTRAR LISTAGEM POR TITULO
     private List<Filme> getFilmeByTitulo(@RequestParam(required = false) String titulo, @RequestParam(required = false) String tipoGenero, List<Filme> filmes) {
         filmes.addAll(filmeRepository.findByTituloContainingIgnoreCase(titulo));
         if (!(tipoGenero == null))
@@ -73,8 +76,10 @@ public class FilmeController
         return filmes;
     }
 
+    //INCLUIR FILME
     @RequestMapping(value = "/incluirFilme", method = RequestMethod.POST)
-    public ResponseEntity<FilmeDto> incluirFilme(@RequestBody @Valid FilmeForm form, UriComponentsBuilder uriBuilder) {
+    @Transactional
+    public ResponseEntity<FilmeDto> incluir(@RequestBody @Valid FilmeForm form, UriComponentsBuilder uriBuilder) {
         Filme filme = form.converter(generoRepository);
         filmeRepository.save(filme);
 
@@ -82,11 +87,32 @@ public class FilmeController
         return ResponseEntity.created(uri).body(new FilmeDto(filme));
     }
 
+    //CONSULTAR FILME
     @RequestMapping(value = "/consultarFilme/{id}", method = RequestMethod.GET)
     public ConsultaFilmeDto consultar(@PathVariable Integer id)
     {
         Filme filme = filmeRepository.getOne(id);
         return new ConsultaFilmeDto(filme);
+    }
+
+    //EDITAR FILME
+    @RequestMapping(value = "/editarFilme/{id}", method = RequestMethod.PUT)
+    @Transactional
+    public ResponseEntity<FilmeDto> editar(@PathVariable Integer id, @RequestBody @Valid FilmeForm form)
+    {
+        Filme filme = form.editarFilme(id, filmeRepository);
+
+        return ResponseEntity.ok(new FilmeDto(filme));
+    }
+
+    //EXCLUIR FILME
+    @RequestMapping(value = "/excluirFilme/{id}", method = RequestMethod.DELETE)
+    @Transactional
+    public ResponseEntity<?> excluir(@PathVariable Integer id)
+    {
+        filmeRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
     }
 
 }
