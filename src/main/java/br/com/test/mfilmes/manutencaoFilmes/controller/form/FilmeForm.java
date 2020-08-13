@@ -21,6 +21,7 @@ public class FilmeForm
     private String sinopse;
     private int ano;
 
+    //getters e setters
     public String getTitulo()
     {
         return titulo;
@@ -70,12 +71,13 @@ public class FilmeForm
         this.ano = ano;
     }
 
-    //converte um form em um filme
+    //converte um form em um filme para inclusão
     public Filme converter(GeneroRepository generoRepository)
     {   Genero genero = generoRepository.findByTipo(tipoGenero);
         return new Filme(titulo, diretor, genero, sinopse, ano);
     }
 
+    //editando filme
     public Filme editarFilme(Integer id, FilmeRepository filmeRepository, GeneroRepository generoRepository)
     {
         Filme filme = filmeRepository.getOne(id);
