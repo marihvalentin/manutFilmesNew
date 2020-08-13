@@ -29,7 +29,7 @@ public class FilmeController
     private GeneroRepository generoRepository;
 
     //LISTAR FILMES
-    @RequestMapping(value = "/listarFilmes", method = RequestMethod.GET)
+    @RequestMapping(value = "/listar", method = RequestMethod.GET)
     public List<FilmeDto> listarFilmes(@RequestParam(required = false) String titulo,
                                        @RequestParam(required = false) String tipoGenero)
     {
@@ -63,7 +63,8 @@ public class FilmeController
     }
 
     //FILTRAR LISTAGEM POR TITULO
-    private List<Filme> getFilmeByTitulo(@RequestParam(required = false) String titulo, @RequestParam(required = false) String tipoGenero, List<Filme> filmes) {
+    private List<Filme> getFilmeByTitulo(@RequestParam(required = false) String titulo,
+                                         @RequestParam(required = false) String tipoGenero, List<Filme> filmes) {
         filmes.addAll(filmeRepository.findByTituloContainingIgnoreCase(titulo));
         if (!(tipoGenero == null))
         {
@@ -78,7 +79,7 @@ public class FilmeController
     }
 
     //INCLUIR FILME
-    @RequestMapping(value = "/incluirFilme", method = RequestMethod.POST)
+    @RequestMapping(value = "/incluir/", method = RequestMethod.POST)
     @Transactional
     public ResponseEntity<FilmeDto> incluir(@RequestBody @Valid FilmeForm form, UriComponentsBuilder uriBuilder) {
         Filme filme = form.converter(generoRepository);
@@ -89,7 +90,7 @@ public class FilmeController
     }
 
     //CONSULTAR FILME
-    @RequestMapping(value = "/consultarFilme/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/consultar/{id}", method = RequestMethod.GET)
     public ResponseEntity<ConsultaFilmeDto> consultar(@PathVariable Integer id)
     {
         Optional<Filme> filme = filmeRepository.findById(id);
@@ -101,21 +102,21 @@ public class FilmeController
     }
 
     //EDITAR FILME
-    @RequestMapping(value = "/editarFilme/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/editar/{id}", method = RequestMethod.PUT)
     @Transactional
     public ResponseEntity<FilmeDto> editar(@PathVariable Integer id, @RequestBody @Valid FilmeForm form)
     {
         Optional<Filme> optional = filmeRepository.findById(id);
         if(optional.isPresent())
         {
-            Filme filme = form.editarFilme(id, filmeRepository);
+            Filme filme = form.editarFilme(id, filmeRepository, generoRepository);
             return ResponseEntity.ok(new FilmeDto(filme));
         }
         return ResponseEntity.notFound().build();
     }
 
     //EXCLUIR FILME
-    @RequestMapping(value = "/excluirFilme/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/excluir/{id}", method = RequestMethod.DELETE)
     @Transactional
     public ResponseEntity<?> excluir(@PathVariable Integer id)
     {

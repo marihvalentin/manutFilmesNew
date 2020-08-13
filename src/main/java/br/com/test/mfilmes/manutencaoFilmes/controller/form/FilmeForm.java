@@ -76,16 +76,18 @@ public class FilmeForm
         return new Filme(titulo, diretor, genero, sinopse, ano);
     }
 
-    public Filme editarFilme(Integer id, FilmeRepository filmeRepository)
+    public Filme editarFilme(Integer id, FilmeRepository filmeRepository, GeneroRepository generoRepository)
     {
         Filme filme = filmeRepository.getOne(id);
+        Genero genero = generoRepository.findByTipo(tipoGenero);
 
         filme.setTitulo(this.titulo);
         filme.setDiretor(this.diretor);
-        //filme.setGenero();
+        filme.setGenero(genero);
         filme.setSinopse(this.sinopse);
         filme.setAno(this.ano);
 
         return filme;
     }
+
 }
