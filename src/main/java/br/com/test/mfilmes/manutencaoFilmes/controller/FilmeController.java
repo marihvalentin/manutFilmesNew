@@ -79,7 +79,7 @@ public class FilmeController
     }
 
     //INCLUIR FILME
-    @RequestMapping(value = "/incluir/", method = RequestMethod.POST)
+    @RequestMapping(value = "/incluirFilme", method = RequestMethod.POST)
     @Transactional
     public ResponseEntity<FilmeDto> incluir(@RequestBody @Valid FilmeForm form, UriComponentsBuilder uriBuilder) {
         Filme filme = form.converter(generoRepository);
@@ -96,9 +96,10 @@ public class FilmeController
         Optional<Filme> filme = filmeRepository.findById(id);
         if(filme.isPresent())
         {
+            //se o id passado existir como filme cadastrado, executar a consulta e retornar o filme
             return ResponseEntity.ok(new ConsultaFilmeDto(filme.get()));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); //senão, retornar 404
     }
 
     //EDITAR FILME
@@ -109,10 +110,11 @@ public class FilmeController
         Optional<Filme> optional = filmeRepository.findById(id);
         if(optional.isPresent())
         {
+            //se o id passado existir como filme cadastrado, editar e retornar o filme no formato definido na FilmeDto
             Filme filme = form.editarFilme(id, filmeRepository, generoRepository);
             return ResponseEntity.ok(new FilmeDto(filme));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); //senão, retornar 404
     }
 
     //EXCLUIR FILME
@@ -123,10 +125,11 @@ public class FilmeController
         Optional<Filme> optional = filmeRepository.findById(id);
         if(optional.isPresent())
         {
+            //se o id passado existir como filme cadastrado, excluir o filme
             filmeRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); //senão, retornar 404
     }
 
 }
