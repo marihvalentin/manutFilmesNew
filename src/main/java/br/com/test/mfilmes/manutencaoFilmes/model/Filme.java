@@ -3,7 +3,6 @@ package br.com.test.mfilmes.manutencaoFilmes.model;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity(name = "filme") //transformando a classe em entidade da JPA
 public class Filme
@@ -96,4 +95,5 @@ public class Filme
     {
         this.genero = genero;
     }
+
 }
